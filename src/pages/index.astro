@@ -7,7 +7,7 @@ import "../styles/global.css";
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Tool's Downloader Studio (Astro)</title>
+        <title>Tool's Studio</title>
         <link
             href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap"
             rel="stylesheet"
@@ -16,21 +16,40 @@ import "../styles/global.css";
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         />
+
+        <!-- PWA Meta Tags -->
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#0b0f19" />
+        <link rel="apple-touch-icon" href="/favicon.svg" />
     </head>
     <body>
         <div class="background-animation"></div>
 
         <div class="container glass-panel">
             <header>
+                <div class="top-bar">
+                    <button id="btnDonate" class="text-btn donate-btn"
+                        ><i class="fa-solid fa-heart"></i> Donate</button
+                    >
+                    <button id="btnChangelogs" class="text-btn"
+                        ><i class="fa-solid fa-list-ul"></i> Changelogs</button
+                    >
+                </div>
                 <div class="logo-icon">
-                    <i class="fa-solid fa-bolt"></i>
+                    <i class="fa-solid fa-bolt" id="mainIcon"></i>
                 </div>
                 <h1>Tool's <span>Studio</span></h1>
-                <p>Download high-quality video and audio seamlessly.</p>
+                <p id="headerDesc">Download high-quality video and audio seamlessly.</p>
             </header>
 
             <main>
-                <div class="input-group">
+                <div class="tab-navigation">
+                    <button class="tab-btn active" id="tabYt">YouTube Downloader</button>
+                    <button class="tab-btn" id="tabBg">Remove BG</button>
+                </div>
+
+                <div id="ytSection" class="feature-section active">
+                    <div class="input-group">
                     <input
                         type="text"
                         id="urlInput"
@@ -95,15 +114,104 @@ import "../styles/global.css";
                         >Download Another</button
                     >
                 </div>
+
+                </div>
+
+                <div id="bgSection" class="feature-section">
+                    <div class="upload-zone" id="uploadZone">
+                        <input type="file" id="fileInput" accept="image/png, image/jpeg, image/jpg, image/webp">
+                        <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                        <h3 class="upload-text">Drag & Drop Image Here</h3>
+                        <p class="upload-subtext">or click to browse files (PNG, JPG, WEBP)</p>
+                    </div>
+
+                    <div id="bgErrorMsg" class="error-message"></div>
+
+                    <div id="bgLoadingSection" class="bg-result-container hidden">
+                        <i class="fa-solid fa-spinner loading-spinner"></i>
+                        <h3 id="bgStatusText">Removing background...</h3>
+                    </div>
+
+                    <div id="bgResultSection" class="bg-result-container hidden">
+                        <div class="slider-container" id="sliderContainer">
+                            <img class="bg-result-image slider-img" id="bgResultImage" src="" alt="Removed Background Result">
+                            <img class="slider-img fg" id="fgOriginalImage" src="" alt="Original Image">
+                            <div class="slider-divider" id="sliderDivider"></div>
+                            <div class="slider-handle" id="sliderHandle">
+                                <i class="fa-solid fa-arrows-left-right"></i>
+                            </div>
+                        </div>
+                        <a id="bgDownloadLink" href="#" class="download-btn" download="removed-bg.png">
+                            <i class="fa-solid fa-download"></i> Save Image
+                        </a>
+                        <button id="newBgBtn" class="secondary-btn">Process Another Image</button>
+                    </div>
+                </div>
+
+                <!-- Local Ad Banner -->
+                <div class="ad-banner">
+                    <div class="ad-content">
+                        <span class="ad-badge">Sponsored</span>
+                        <h4>Butuh Jasa Photocopy & Percetakan?</h4>
+                        <p>
+                            Kunjungi <strong>SMANSA Corner</strong> untuk hasil cepat
+                            dan berkualitas.
+                        </p>
+                    </div>
+                    <a
+                        href="https://smansacorner.my.id"
+                        target="_blank"
+                        class="ad-btn"
+                    >
+                        Kunjungi Web <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
             </main>
+
+            <footer>
+                <p>&copy; 2026 Tool's Studio. All rights reserved.</p>
+                <div class="footer-links">
+                    <button id="btnPrivacy" class="text-btn">Privacy</button>
+                    <span>|</span>
+                    <button id="btnTerms" class="text-btn">Terms</button>
+                </div>
+            </footer>
+        </div>
+
+        <!-- Modal Overlay -->
+        <div id="infoModal" class="modal-overlay hidden">
+            <div class="modal-content glass-panel">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Title</h2>
+                    <button id="closeModal" class="icon-btn"
+                        ><i class="fa-solid fa-xmark"></i></button
+                    >
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
         </div>
 
         <script>
+            // @ts-nocheck
             document.addEventListener("DOMContentLoaded", () => {
-                // Configure Base API URL here (Falls back to local PC python server)
-                const API_BASE =
-                    import.meta.env.PUBLIC_API_URL ||
-                    "http://127.0.0.1:5000";
+                // Register Service Worker for PWA
+                if ("serviceWorker" in navigator) {
+                    navigator.serviceWorker
+                        .register("/sw.js")
+                        .catch((err) =>
+                            console.error(
+                                "Service Worker registration failed:",
+                                err,
+                            ),
+                        );
+                }
+
+                // Configure Base API URL based on environment
+                const API_BASE = import.meta.env.DEV 
+                    ? "http://localhost:5000" 
+                    : "https://api.zhogia.my.id";
 
                 const urlInput = document.getElementById("urlInput");
                 const fetchBtn = document.getElementById("fetchBtn");
@@ -132,6 +240,297 @@ import "../styles/global.css";
 
                 let currentMediaData = null;
                 let pollInterval = null;
+                let currentTaskId = null;
+
+                // Tab Logic & Feature Switching
+                const tabYt = document.getElementById("tabYt") as HTMLButtonElement;
+                const tabBg = document.getElementById("tabBg") as HTMLButtonElement;
+                const ytSection = document.getElementById("ytSection") as HTMLDivElement;
+                const bgSection = document.getElementById("bgSection") as HTMLDivElement;
+                const mainIcon = document.getElementById("mainIcon") as HTMLElement;
+                const headerDesc = document.getElementById("headerDesc") as HTMLParagraphElement;
+
+                const switchTab = (activeTab) => {
+                    if (activeTab === "yt") {
+                        tabYt.classList.add("active");
+                        tabBg.classList.remove("active");
+                        ytSection.classList.add("active");
+                        bgSection.classList.remove("active");
+                        document.body.classList.remove("theme-bg");
+                        document.body.classList.add("theme-yt");
+                        mainIcon.className = "fa-solid fa-bolt";
+                        headerDesc.textContent = "Download high-quality video and audio seamlessly.";
+                    } else {
+                        tabBg.classList.add("active");
+                        tabYt.classList.remove("active");
+                        bgSection.classList.add("active");
+                        ytSection.classList.remove("active");
+                        document.body.classList.remove("theme-yt");
+                        document.body.classList.add("theme-bg");
+                        mainIcon.className = "fa-solid fa-wand-magic-sparkles";
+                        headerDesc.textContent = "Remove background from your images instantly with AI.";
+                    }
+                };
+
+                tabYt.addEventListener("click", () => switchTab("yt"));
+                tabBg.addEventListener("click", () => switchTab("bg"));
+
+                // Remove BG Logic
+                const uploadZone = document.getElementById("uploadZone") as HTMLDivElement;
+                const fileInput = document.getElementById("fileInput") as HTMLInputElement;
+                const bgErrorMsg = document.getElementById("bgErrorMsg") as HTMLDivElement;
+                const bgLoadingSection = document.getElementById("bgLoadingSection") as HTMLDivElement;
+                const bgStatusText = document.getElementById("bgStatusText") as HTMLHeadingElement;
+                const bgResultSection = document.getElementById("bgResultSection") as HTMLDivElement;
+                const bgResultImage = document.getElementById("bgResultImage") as HTMLImageElement;
+                const fgOriginalImage = document.getElementById("fgOriginalImage") as HTMLImageElement;
+                const sliderContainer = document.getElementById("sliderContainer") as HTMLDivElement;
+                const sliderDivider = document.getElementById("sliderDivider") as HTMLDivElement;
+                const sliderHandle = document.getElementById("sliderHandle") as HTMLDivElement;
+                const bgDownloadLink = document.getElementById("bgDownloadLink") as HTMLAnchorElement;
+                const newBgBtn = document.getElementById("newBgBtn") as HTMLButtonElement;
+
+                uploadZone.addEventListener("click", () => fileInput.click());
+
+                uploadZone.addEventListener("dragover", (e) => {
+                    e.preventDefault();
+                    uploadZone.classList.add("dragover");
+                });
+
+                uploadZone.addEventListener("dragleave", () => {
+                    uploadZone.classList.remove("dragover");
+                });
+
+                uploadZone.addEventListener("drop", (e) => {
+                    e.preventDefault();
+                    uploadZone.classList.remove("dragover");
+                    if (e.dataTransfer && e.dataTransfer.files.length) {
+                        fileInput.files = e.dataTransfer.files;
+                        processImage();
+                    }
+                });
+
+                fileInput.addEventListener("change", () => {
+                    if (fileInput.files.length) processImage();
+                });
+
+                const showBgError = (msg) => {
+                    bgErrorMsg.textContent = msg;
+                    bgErrorMsg.style.display = "block";
+                    bgLoadingSection.classList.add("hidden");
+                };
+
+                const processImage = async () => {
+                    const file = fileInput.files?.[0];
+                    if (!file) return;
+
+                    const validTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
+                    if (!validTypes.includes(file.type)) {
+                        showBgError("Unsupported file type. Please upload a PNG, JPG, or WEBP.");
+                        return;
+                    }
+
+                    if (file.size > 10 * 1024 * 1024) {
+                        showBgError("Gambar terlalu besar! Maksimal ukuran file adalah 10 MB.");
+                        return;
+                    }
+
+                    bgErrorMsg.style.display = "none";
+                    uploadZone.classList.add("hidden");
+                    bgResultSection.classList.add("hidden");
+                    bgLoadingSection.classList.remove("hidden");
+
+                    const formData = new FormData();
+                    formData.append("image", file);
+
+                    try {
+                        const res = await fetch(`${API_BASE}/api/remove-bg`, {
+                            method: "POST",
+                            body: formData
+                        });
+
+                        if (!res.ok) {
+                            const data = await res.json().catch(() => ({}));
+                            throw new Error(data.error || "Failed to process image.");
+                        }
+
+                        const originalUrl = URL.createObjectURL(file);
+                        fgOriginalImage.src = originalUrl;
+
+                        const blob = await res.blob();
+                        const objUrl = URL.createObjectURL(blob);
+                        
+                        bgResultImage.src = objUrl;
+                        bgDownloadLink.href = objUrl;
+                        
+                        bgLoadingSection.classList.add("hidden");
+                        bgResultSection.classList.remove("hidden");
+                    } catch (err) {
+                        showBgError(err.message);
+                        uploadZone.classList.remove("hidden");
+                    }
+                };
+
+                let isDragging = false;
+                const updateSliderPosition = (clientX) => {
+                    if (!sliderContainer) return;
+                    const rect = sliderContainer.getBoundingClientRect();
+                    let x = clientX - rect.left;
+                    if (x < 0) x = 0;
+                    if (x > rect.width) x = rect.width;
+                    const percent = (x / rect.width) * 100;
+                    fgOriginalImage.style.clipPath = `polygon(0 0, ${percent}% 0, ${percent}% 100%, 0 100%)`;
+                    sliderDivider.style.left = `${percent}%`;
+                    sliderHandle.style.left = `${percent}%`;
+                };
+
+                const startDrag = (e) => {
+                    isDragging = true;
+                    updateSliderPosition(e.clientX || (e.touches && e.touches[0].clientX));
+                };
+
+                const stopDrag = () => { isDragging = false; };
+
+                const onDrag = (e) => {
+                    if (!isDragging) return;
+                    e.preventDefault();
+                    updateSliderPosition(e.clientX || (e.touches && e.touches[0].clientX));
+                };
+
+                sliderContainer.addEventListener("mousedown", startDrag);
+                sliderContainer.addEventListener("touchstart", startDrag, { passive: true });
+                window.addEventListener("mouseup", stopDrag);
+                window.addEventListener("touchend", stopDrag);
+                window.addEventListener("mousemove", onDrag);
+                window.addEventListener("touchmove", onDrag, { passive: false });
+
+                newBgBtn.addEventListener("click", () => {
+                    bgResultSection.classList.add("hidden");
+                    bgErrorMsg.style.display = "none";
+                    fileInput.value = "";
+                    bgResultImage.src = "";
+                    fgOriginalImage.src = "";
+                    URL.revokeObjectURL(bgDownloadLink.href);
+                    uploadZone.classList.remove("hidden");
+                    
+                    // Reset Slider
+                    fgOriginalImage.style.clipPath = 'polygon(0 0, 50% 0, 50% 100%, 0 100%)';
+                    sliderDivider.style.left = '50%';
+                    sliderHandle.style.left = '50%';
+                });
+
+                // Set default theme class on body
+                document.body.classList.add("theme-yt");
+
+                // Modal Logic
+                const initModals = () => {
+                    const modal = document.getElementById("infoModal");
+                    const modalTitle = document.getElementById("modalTitle");
+                    const modalBody = document.getElementById("modalBody");
+                    const closeModal = document.getElementById("closeModal");
+
+                    const btnDonate = document.getElementById("btnDonate");
+                    const btnChangelogs =
+                        document.getElementById("btnChangelogs");
+                    const btnPrivacy = document.getElementById("btnPrivacy");
+                    const btnTerms = document.getElementById("btnTerms");
+
+                    const openModal = (title, contentHTML) => {
+                        modalTitle.textContent = title;
+                        modalBody.innerHTML = contentHTML;
+                        modal.classList.remove("hidden");
+                    };
+
+                    closeModal.addEventListener("click", () => {
+                        modal.classList.add("hidden");
+                    });
+
+                    modal.addEventListener("click", (e) => {
+                        if (e.target === modal) modal.classList.add("hidden");
+                    });
+
+                    btnDonate.addEventListener("click", () => {
+                        openModal(
+                            "Support Us",
+                            `
+                            <p>If you find this tool useful, consider supporting us!</p>
+                            <div class="donate-options">
+                                <a href="https://ko-fi.com/zhogia" target="_blank" class="donate-card kofi">
+                                    <i class="fa-solid fa-mug-hot"></i> Ko-fi
+                                </a>
+                                <a href="https://saweria.co/zhogia" target="_blank" class="donate-card saweria">
+                                    <i class="fa-solid fa-wallet"></i> Saweria
+                                </a>
+                                <div class="donate-card crypto">
+                                    <div class="crypto-title">
+                                        <i class="fa-brands fa-bitcoin"></i>
+                                        <span>Crypto (USDT BSC-20)</span>
+                                    </div>
+                                    <code>0xb2fb4da6c5313372a13ce89dddba2aed9eeab5f1</code>
+                                </div>
+                            </div>
+                        `,
+                        );
+                    });
+
+                    btnChangelogs.addEventListener("click", () => {
+                        openModal(
+                            "Changelogs",
+                            `
+                            <h3>v1.1.2 (Latest)</h3>
+                            <ul>
+                                <li><strong>New Feature:</strong> Dual-SPA Architecture! Added a new powerful "Remove Background" AI Tool.</li>
+                                <li><strong>UI Updates:</strong> Added Tab Navigations with beautiful dynamic color themes (YouTube Maroon & AI Royal Blue) and smooth fade-in animations.</li>
+                                <li><strong>UI Updates:</strong> Interactive Dropzone & Before/After Image Comparison Slider for Remove BG.</li>
+                                <li><strong>Server Stability:</strong> Added 10MB max image upload limit for AI Rendering.</li>
+                                <li><strong>Privacy & Cleaner:</strong> Implemented extreme Auto-Cleanup systems! Processed file and payloads are instantly wiped clean from the server memory after you hit 'Process Another' or close the browser tab. Data is never permanently stored!</li>
+                            </ul>
+                            <h3>v1.0.1</h3>
+                            <ul>
+                                <li>Added server load protection features.</li>
+                                <li><strong>Restriction:</strong> All videos/audios are strictly limited to a maximum duration of 1 hour to ensure server stability.</li>
+                                <li><strong>UI Updates:</strong> Added Changelogs menu in the header.</li>
+                                <li><strong>UI Updates:</strong> Added Donate button in the header with Ko-fi, Saweria, and Crypto support.</li>
+                                <li><strong>UI Updates:</strong> Added Copyright text, Privacy Policy, and Terms of Service in the footer.</li>
+                            </ul>
+                            <h3>v1.0.0</h3>
+                            <ul>
+                                <li>Initial release of Tool's Studio</li>
+                                <li>Support for YouTube video/audio download</li>
+                                <li>Astro JS frontend migration</li>
+                                <li>Dynamic quality selection added</li>
+                            </ul>
+                        `,
+                        );
+                    });
+
+                    btnPrivacy.addEventListener("click", () => {
+                        openModal(
+                            "Privacy Policy",
+                            `
+                            <p>Your privacy is important to us. This application does not store any of your personal data or downloaded files on our servers.</p>
+                            <br/>
+                            <p>All video and audio processing is done temporarily and deleted immediately after the transfer is complete.</p>
+                            <br/>
+                            <p>We do not track your IP address or share your usage data with third parties.</p>
+                        `,
+                        );
+                    });
+
+                    btnTerms.addEventListener("click", () => {
+                        openModal(
+                            "Terms of Service",
+                            `
+                            <p>By using this tool, you agree to only download content for which you have the right to do so. This tool is intended for personal, non-commercial use.</p>
+                            <br/>
+                            <p>We are not responsible for any misuse of this tool or copyright infringement caused by users.</p>
+                            <br/>
+                            <p>This service is provided "as is" without any warranties.</p>
+                        `,
+                        );
+                    });
+                };
+                initModals();
 
                 const showError = (msg) => {
                     errorMsg.textContent = msg;
@@ -313,6 +712,7 @@ import "../styles/global.css";
                             );
                         }
 
+                        currentTaskId = data.task_id;
                         pollInterval = setInterval(
                             () => pollStatus(data.task_id),
                             1000,
@@ -324,9 +724,19 @@ import "../styles/global.css";
                 });
 
                 newDownloadBtn.addEventListener("click", () => {
+                    if (currentTaskId) {
+                        fetch(`${API_BASE}/api/cleanup/${currentTaskId}`, { method: 'POST' }).catch(() => {});
+                        currentTaskId = null;
+                    }
                     resultSection.classList.add("hidden");
                     urlInput.value = "";
                     urlInput.focus();
+                });
+
+                window.addEventListener("beforeunload", () => {
+                    if (currentTaskId) {
+                        navigator.sendBeacon(`${API_BASE}/api/cleanup/${currentTaskId}`);
+                    }
                 });
             });
         </script>
