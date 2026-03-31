@@ -7,7 +7,7 @@ import "../styles/global.css";
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Tool's Downloader Studio (Astro)</title>
+        <title>Tool's Studio</title>
         <link
             href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap"
             rel="stylesheet"
@@ -16,12 +16,25 @@ import "../styles/global.css";
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         />
+
+        <!-- PWA Meta Tags -->
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#0b0f19" />
+        <link rel="apple-touch-icon" href="/favicon.svg" />
     </head>
     <body>
         <div class="background-animation"></div>
 
         <div class="container glass-panel">
             <header>
+                <div class="top-bar">
+                    <button id="btnDonate" class="text-btn donate-btn"
+                        ><i class="fa-solid fa-heart"></i> Donate</button
+                    >
+                    <button id="btnChangelogs" class="text-btn"
+                        ><i class="fa-solid fa-list-ul"></i> Changelogs</button
+                    >
+                </div>
                 <div class="logo-icon">
                     <i class="fa-solid fa-bolt"></i>
                 </div>
@@ -95,15 +108,70 @@ import "../styles/global.css";
                         >Download Another</button
                     >
                 </div>
+
+                <!-- Local Ad Banner -->
+                <div class="ad-banner">
+                    <div class="ad-content">
+                        <span class="ad-badge">Sponsored</span>
+                        <h4>Butuh Jasa Photocopy & Percetakan?</h4>
+                        <p>
+                            Kunjungi <strong>SMANSA Corner</strong> untuk hasil cepat
+                            dan berkualitas.
+                        </p>
+                    </div>
+                    <a
+                        href="https://smansacorner.my.id"
+                        target="_blank"
+                        class="ad-btn"
+                    >
+                        Kunjungi Web <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
             </main>
+
+            <footer>
+                <p>&copy; 2026 Tool's Studio. All rights reserved.</p>
+                <div class="footer-links">
+                    <button id="btnPrivacy" class="text-btn">Privacy</button>
+                    <span>|</span>
+                    <button id="btnTerms" class="text-btn">Terms</button>
+                </div>
+            </footer>
+        </div>
+
+        <!-- Modal Overlay -->
+        <div id="infoModal" class="modal-overlay hidden">
+            <div class="modal-content glass-panel">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Title</h2>
+                    <button id="closeModal" class="icon-btn"
+                        ><i class="fa-solid fa-xmark"></i></button
+                    >
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
         </div>
 
         <script>
             document.addEventListener("DOMContentLoaded", () => {
+                // Register Service Worker for PWA
+                if ("serviceWorker" in navigator) {
+                    navigator.serviceWorker
+                        .register("/sw.js")
+                        .catch((err) =>
+                            console.error(
+                                "Service Worker registration failed:",
+                                err,
+                            ),
+                        );
+                }
+
                 // Configure Base API URL here (Falls back to local PC python server)
                 const API_BASE =
                     import.meta.env.PUBLIC_API_URL ||
-                    "http://127.0.0.1:5000";
+                    "https://api.zhogia.my.id";
 
                 const urlInput = document.getElementById("urlInput");
                 const fetchBtn = document.getElementById("fetchBtn");
@@ -132,6 +200,108 @@ import "../styles/global.css";
 
                 let currentMediaData = null;
                 let pollInterval = null;
+
+                // Modal Logic
+                const initModals = () => {
+                    const modal = document.getElementById("infoModal");
+                    const modalTitle = document.getElementById("modalTitle");
+                    const modalBody = document.getElementById("modalBody");
+                    const closeModal = document.getElementById("closeModal");
+
+                    const btnDonate = document.getElementById("btnDonate");
+                    const btnChangelogs =
+                        document.getElementById("btnChangelogs");
+                    const btnPrivacy = document.getElementById("btnPrivacy");
+                    const btnTerms = document.getElementById("btnTerms");
+
+                    const openModal = (title, contentHTML) => {
+                        modalTitle.textContent = title;
+                        modalBody.innerHTML = contentHTML;
+                        modal.classList.remove("hidden");
+                    };
+
+                    closeModal.addEventListener("click", () => {
+                        modal.classList.add("hidden");
+                    });
+
+                    modal.addEventListener("click", (e) => {
+                        if (e.target === modal) modal.classList.add("hidden");
+                    });
+
+                    btnDonate.addEventListener("click", () => {
+                        openModal(
+                            "Support Us",
+                            `
+                            <p>If you find this tool useful, consider supporting us!</p>
+                            <div class="donate-options">
+                                <a href="https://ko-fi.com/zhogia" target="_blank" class="donate-card kofi">
+                                    <i class="fa-solid fa-mug-hot"></i> Ko-fi
+                                </a>
+                                <a href="https://saweria.co/zhogia" target="_blank" class="donate-card saweria">
+                                    <i class="fa-solid fa-wallet"></i> Saweria
+                                </a>
+                                <div class="donate-card crypto">
+                                    <div class="crypto-title">
+                                        <i class="fa-brands fa-bitcoin"></i>
+                                        <span>Crypto (USDT BSC-20)</span>
+                                    </div>
+                                    <code>0xb2fb4da6c5313372a13ce89dddba2aed9eeab5f1</code>
+                                </div>
+                            </div>
+                        `,
+                        );
+                    });
+
+                    btnChangelogs.addEventListener("click", () => {
+                        openModal(
+                            "Changelogs",
+                            `
+                            <h3>v1.0.1 (Latest)</h3>
+                            <ul>
+                                <li>Added server load protection features.</li>
+                                <li><strong>Restriction:</strong> All videos/audios are strictly limited to a maximum duration of 1 hour to ensure server stability.</li>
+                                <li><strong>UI Updates:</strong> Added Changelogs menu in the header.</li>
+                                <li><strong>UI Updates:</strong> Added Donate button in the header with Ko-fi, Saweria, and Crypto support.</li>
+                                <li><strong>UI Updates:</strong> Added Copyright text, Privacy Policy, and Terms of Service in the footer.</li>
+                            </ul>
+                            <h3>v1.0.0</h3>
+                            <ul>
+                                <li>Initial release of Tool's Studio</li>
+                                <li>Support for YouTube video/audio download</li>
+                                <li>Astro JS frontend migration</li>
+                                <li>Dynamic quality selection added</li>
+                            </ul>
+                        `,
+                        );
+                    });
+
+                    btnPrivacy.addEventListener("click", () => {
+                        openModal(
+                            "Privacy Policy",
+                            `
+                            <p>Your privacy is important to us. This application does not store any of your personal data or downloaded files on our servers.</p>
+                            <br/>
+                            <p>All video and audio processing is done temporarily and deleted immediately after the transfer is complete.</p>
+                            <br/>
+                            <p>We do not track your IP address or share your usage data with third parties.</p>
+                        `,
+                        );
+                    });
+
+                    btnTerms.addEventListener("click", () => {
+                        openModal(
+                            "Terms of Service",
+                            `
+                            <p>By using this tool, you agree to only download content for which you have the right to do so. This tool is intended for personal, non-commercial use.</p>
+                            <br/>
+                            <p>We are not responsible for any misuse of this tool or copyright infringement caused by users.</p>
+                            <br/>
+                            <p>This service is provided "as is" without any warranties.</p>
+                        `,
+                        );
+                    });
+                };
+                initModals();
 
                 const showError = (msg) => {
                     errorMsg.textContent = msg;
