@@ -22,7 +22,7 @@ import "../styles/global.css";
         <meta name="theme-color" content="#0b0f19" />
         <link rel="apple-touch-icon" href="/favicon.svg" />
     </head>
-    <body>
+    <body class="theme-yt">
         <div class="background-animation"></div>
 
         <div class="container glass-panel">
@@ -36,77 +36,192 @@ import "../styles/global.css";
                     >
                 </div>
                 <div class="logo-icon">
-                    <i class="fa-solid fa-bolt"></i>
+                    <i class="fa-solid fa-download" id="mainIcon"></i>
                 </div>
                 <h1>Tool's <span>Studio</span></h1>
-                <p>Download high-quality video and audio seamlessly.</p>
+                <p id="headerDesc">
+                    Download high-quality video and audio seamlessly.
+                </p>
             </header>
 
             <main>
-                <div class="input-group">
-                    <input
-                        type="text"
-                        id="urlInput"
-                        placeholder="Paste YouTube link here..."
-                        autocomplete="off"
-                    />
-                    <button id="fetchBtn" class="primary-btn">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        <span id="fetchText">Fetch</span>
-                    </button>
+                <div class="tab-navigation">
+                    <button class="tab-btn active" id="tabYt"
+                        >Grab It All</button
+                    >
+                    <button class="tab-btn" id="tabBg">Remove BG</button>
                 </div>
 
-                <div id="errorMsg" class="error-message"></div>
-
-                <div id="mediaInfo" class="media-info hidden">
-                    <div class="thumbnail-container">
-                        <img id="thumbnail" src="" alt="Video Thumbnail" />
-                    </div>
-                    <div class="details">
-                        <h2 id="videoTitle">Video Title</h2>
-
-                        <div class="options-group">
-                            <div class="form-control">
-                                <label for="formatType">Format</label>
-                                <select id="formatType">
-                                    <option value="mp4">Video (MP4)</option>
-                                    <option value="mp3">Audio (MP3)</option>
-                                </select>
-                            </div>
-                            <div class="form-control">
-                                <label for="qualitySelect">Quality</label>
-                                <select id="qualitySelect">
-                                    <!-- Dynamically populated -->
-                                </select>
-                            </div>
-                        </div>
-
-                        <button id="startDownloadBtn" class="action-btn">
-                            <i class="fa-solid fa-cloud-arrow-down"></i> Start Processing
+                <!-- YouTube Downloader Section -->
+                <div id="ytSection" class="feature-section active">
+                    <div class="input-group">
+                        <input
+                            type="text"
+                            id="urlInput"
+                            placeholder="Paste any link here (YT, FB, IG, X, etc)..."
+                            autocomplete="off"
+                        />
+                        <button id="fetchBtn" class="primary-btn">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <span id="fetchText">Fetch</span>
                         </button>
                     </div>
+
+                    <div id="errorMsg" class="error-message"></div>
+
+                    <div id="mediaInfo" class="media-info hidden">
+                        <div class="thumbnail-container">
+                            <img id="thumbnail" src="" alt="Video Thumbnail" />
+                        </div>
+                        <div class="details">
+                            <h2 id="videoTitle">Video Title</h2>
+
+                            <div class="options-group">
+                                <div class="form-control">
+                                    <label for="formatType">Format</label>
+                                    <select id="formatType">
+                                        <option value="mp4">Video (MP4)</option>
+                                        <option value="mp3">Audio (MP3)</option>
+                                        <!-- Image option added dynamically if available -->
+                                    </select>
+                                </div>
+                                <div class="form-control">
+                                    <label for="qualitySelect">Quality</label>
+                                    <select id="qualitySelect">
+                                        <!-- Dynamically populated -->
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button id="startDownloadBtn" class="action-btn">
+                                <i class="fa-solid fa-cloud-arrow-down"></i> Start
+                                Processing
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="progressSection" class="progress-section hidden">
+                        <h3 id="statusText">Starting process...</h3>
+                        <div class="progress-bar-container">
+                            <div id="progressBar" class="progress-bar"></div>
+                        </div>
+                        <div class="stats">
+                            <span id="speedText">--</span>
+                            <span id="etaText">--</span>
+                        </div>
+                    </div>
+
+                    <div id="resultSection" class="result-section hidden">
+                        <i class="fa-regular fa-circle-check success-icon"></i>
+                        <h3>File Ready!</h3>
+                        <a
+                            id="downloadLink"
+                            href="#"
+                            class="download-btn"
+                            download
+                        >
+                            <i class="fa-solid fa-download"></i> Save to Device
+                        </a>
+                        <button id="newDownloadBtn" class="secondary-btn"
+                            >Download Another</button
+                        >
+                    </div>
                 </div>
 
-                <div id="progressSection" class="progress-section hidden">
-                    <h3 id="statusText">Starting process...</h3>
-                    <div class="progress-bar-container">
-                        <div id="progressBar" class="progress-bar"></div>
+                <!-- Remove BG Section -->
+                <div id="bgSection" class="feature-section">
+                    <!-- Model Type Selector -->
+                    <div class="model-selector" id="modelSelector">
+                        <p class="model-selector-label">Select Image Type</p>
+                        <div class="model-options">
+                            <button
+                                class="model-opt active"
+                                data-model="human"
+                                id="modelHuman"
+                            >
+                                <i class="fa-solid fa-user"></i>
+                                <span>Human</span>
+                                <small>Photo / Portrait</small>
+                            </button>
+                            <button
+                                class="model-opt"
+                                data-model="anime"
+                                id="modelAnime"
+                            >
+                                <i class="fa-solid fa-star"></i>
+                                <span>Anime</span>
+                                <small>Illustration / Art</small>
+                            </button>
+                            <button
+                                class="model-opt"
+                                data-model="general"
+                                id="modelGeneral"
+                            >
+                                <i class="fa-solid fa-box"></i>
+                                <span>General</span>
+                                <small>Object / Product</small>
+                            </button>
+                        </div>
                     </div>
-                    <div class="stats">
-                        <span id="speedText">--</span>
-                        <span id="etaText">--</span>
-                    </div>
-                </div>
 
-                <div id="resultSection" class="result-section hidden">
-                    <i class="fa-regular fa-circle-check success-icon"></i>
-                    <h3>File Ready!</h3>
-                    <a id="downloadLink" href="#" class="download-btn" download>
-                        <i class="fa-solid fa-download"></i> Save to Device
-                    </a>
-                    <button id="newDownloadBtn" class="secondary-btn"
-                        >Download Another</button
+                    <div class="upload-zone" id="uploadZone">
+                        <input
+                            type="file"
+                            id="fileInput"
+                            accept="image/png, image/jpeg, image/jpg, image/webp"
+                        />
+                        <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                        <h3 class="upload-text">Drag & Drop Image Here</h3>
+                        <p class="upload-subtext">
+                            or click to browse files (PNG, JPG, WEBP)
+                        </p>
+                    </div>
+
+                    <div id="bgErrorMsg" class="error-message"></div>
+
+                    <div
+                        id="bgLoadingSection"
+                        class="bg-result-container hidden"
                     >
+                        <i class="fa-solid fa-spinner loading-spinner"></i>
+                        <h3 id="bgStatusText">Removing background...</h3>
+                    </div>
+
+                    <div
+                        id="bgResultSection"
+                        class="bg-result-container hidden"
+                    >
+                        <div class="slider-container" id="sliderContainer">
+                            <img
+                                class="bg-result-image slider-img"
+                                id="bgResultImage"
+                                src=""
+                                alt="Removed Background Result"
+                            />
+                            <img
+                                class="slider-img fg"
+                                id="fgOriginalImage"
+                                src=""
+                                alt="Original Image"
+                            />
+                            <div class="slider-divider" id="sliderDivider">
+                            </div>
+                            <div class="slider-handle" id="sliderHandle">
+                                <i class="fa-solid fa-arrows-left-right"></i>
+                            </div>
+                        </div>
+                        <a
+                            id="bgDownloadLink"
+                            href="#"
+                            class="download-btn"
+                            download="removed-bg.png"
+                        >
+                            <i class="fa-solid fa-download"></i> Save Image
+                        </a>
+                        <button id="newBgBtn" class="secondary-btn"
+                            >Process Another Image</button
+                        >
+                    </div>
                 </div>
 
                 <!-- Local Ad Banner -->
@@ -127,16 +242,42 @@ import "../styles/global.css";
                         Kunjungi Web <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
-            </main>
 
-            <footer>
-                <p>&copy; 2026 Tool's Studio. All rights reserved.</p>
-                <div class="footer-links">
-                    <button id="btnPrivacy" class="text-btn">Privacy</button>
-                    <span>|</span>
-                    <button id="btnTerms" class="text-btn">Terms</button>
-                </div>
-            </footer>
+                <footer style="position: relative;">
+                    <p>&copy; 2026 Tool's Studio. All rights reserved.</p>
+                    <div
+                        class="footer-bottom-container"
+                        style="width: 100%; position: relative; display: flex; justify-content: center; align-items: center; margin-top: 0.5rem;"
+                    >
+                        <div class="footer-links">
+                            <button id="btnPrivacy" class="text-btn"
+                                >Privacy</button
+                            >
+                            <span>|</span>
+                            <button id="btnTerms" class="text-btn">Terms</button
+                            >
+                        </div>
+                        <div class="dev-links">
+                            <a
+                                href="https://github.com/SEVENITY"
+                                target="_blank"
+                                title="GitHub"
+                                class="icon-social github"
+                            >
+                                <i class="fa-brands fa-github"></i>
+                            </a>
+                            <a
+                                href="#"
+                                target="_blank"
+                                title="Portfolio"
+                                class="icon-social portfolio"
+                            >
+                                <i class="fa-solid fa-briefcase"></i>
+                            </a>
+                        </div>
+                    </div>
+                </footer>
+            </main>
         </div>
 
         <!-- Modal Overlay -->
@@ -155,6 +296,7 @@ import "../styles/global.css";
         </div>
 
         <script>
+            // @ts-nocheck
             document.addEventListener("DOMContentLoaded", () => {
                 // Register Service Worker for PWA
                 if ("serviceWorker" in navigator) {
@@ -168,10 +310,10 @@ import "../styles/global.css";
                         );
                 }
 
-                // Configure Base API URL here (Falls back to local PC python server)
-                const API_BASE =
-                    import.meta.env.PUBLIC_API_URL ||
-                    "https://api.zhogia.my.id";
+                // Configure Base API URL based on environment
+                const API_BASE = import.meta.env.DEV
+                    ? "http://localhost:5000"
+                    : "https://api.zhogia.my.id";
 
                 const urlInput = document.getElementById("urlInput");
                 const fetchBtn = document.getElementById("fetchBtn");
@@ -200,6 +342,324 @@ import "../styles/global.css";
 
                 let currentMediaData = null;
                 let pollInterval = null;
+                let currentTaskId = null;
+
+                // Tab Logic & Feature Switching
+                const tabYt = document.getElementById("tabYt");
+                const tabBg = document.getElementById("tabBg");
+                const ytSection = document.getElementById("ytSection");
+                const bgSection = document.getElementById("bgSection");
+                const mainIcon = document.getElementById("mainIcon");
+                const headerDesc = document.getElementById("headerDesc");
+
+                const switchTab = (activeTab) => {
+                    if (activeTab === "yt") {
+                        tabYt.classList.add("active");
+                        tabBg.classList.remove("active");
+                        ytSection.classList.add("active");
+                        bgSection.classList.remove("active");
+                        document.body.classList.remove("theme-bg");
+                        document.body.classList.add("theme-yt");
+                        mainIcon.className = "fa-solid fa-download";
+                        headerDesc.textContent =
+                            "Download high-quality video and audio seamlessly.";
+                    } else {
+                        tabBg.classList.add("active");
+                        tabYt.classList.remove("active");
+                        bgSection.classList.add("active");
+                        ytSection.classList.remove("active");
+                        document.body.classList.remove("theme-yt");
+                        document.body.classList.add("theme-bg");
+                        mainIcon.className = "fa-solid fa-wand-magic-sparkles";
+                        headerDesc.textContent =
+                            "Remove background from your images instantly with AI.";
+                    }
+                };
+
+                tabYt.addEventListener("click", () => switchTab("yt"));
+                tabBg.addEventListener("click", () => switchTab("bg"));
+
+                // Remove BG Logic
+                const uploadZone = document.getElementById("uploadZone");
+                const fileInput = document.getElementById("fileInput");
+                const bgErrorMsg = document.getElementById("bgErrorMsg");
+                const bgLoadingSection =
+                    document.getElementById("bgLoadingSection");
+                const bgResultSection =
+                    document.getElementById("bgResultSection");
+                const bgResultImage = document.getElementById("bgResultImage");
+                const fgOriginalImage =
+                    document.getElementById("fgOriginalImage");
+                const sliderContainer =
+                    document.getElementById("sliderContainer");
+                const sliderDivider = document.getElementById("sliderDivider");
+                const sliderHandle = document.getElementById("sliderHandle");
+                const bgDownloadLink =
+                    document.getElementById("bgDownloadLink");
+                const newBgBtn = document.getElementById("newBgBtn");
+
+                // Model type selector
+                let selectedModel = "human";
+                const modelOpts = document.querySelectorAll(".model-opt");
+                modelOpts.forEach((btn) => {
+                    btn.addEventListener("click", () => {
+                        modelOpts.forEach((b) => b.classList.remove("active"));
+                        btn.classList.add("active");
+                        selectedModel = btn.dataset.model;
+                    });
+                });
+
+                uploadZone.addEventListener("click", () => fileInput.click());
+
+                uploadZone.addEventListener("dragover", (e) => {
+                    e.preventDefault();
+                    uploadZone.classList.add("dragover");
+                });
+
+                uploadZone.addEventListener("dragleave", () => {
+                    uploadZone.classList.remove("dragover");
+                });
+
+                uploadZone.addEventListener("drop", (e) => {
+                    e.preventDefault();
+                    uploadZone.classList.remove("dragover");
+                    if (e.dataTransfer && e.dataTransfer.files.length) {
+                        fileInput.files = e.dataTransfer.files;
+                        processImage();
+                    }
+                });
+
+                fileInput.addEventListener("change", () => {
+                    if (fileInput.files.length) processImage();
+                });
+
+                const showBgError = (msg) => {
+                    bgErrorMsg.textContent = msg;
+                    bgErrorMsg.style.display = "block";
+                    bgLoadingSection.classList.add("hidden");
+                };
+
+                const processImage = async () => {
+                    const file = fileInput.files?.[0];
+                    if (!file) return;
+
+                    const validTypes = [
+                        "image/jpeg",
+                        "image/png",
+                        "image/jpg",
+                        "image/webp",
+                    ];
+                    if (!validTypes.includes(file.type)) {
+                        showBgError(
+                            "Unsupported file type. Please upload a PNG, JPG, or WEBP.",
+                        );
+                        return;
+                    }
+
+                    if (file.size > 10 * 1024 * 1024) {
+                        showBgError(
+                            "Gambar terlalu besar! Maksimal ukuran file adalah 10 MB.",
+                        );
+                        return;
+                    }
+
+                    bgErrorMsg.style.display = "none";
+                    uploadZone.classList.add("hidden");
+                    document
+                        .getElementById("modelSelector")
+                        .classList.add("hidden");
+                    bgResultSection.classList.add("hidden");
+                    bgLoadingSection.classList.remove("hidden");
+
+                    const formData = new FormData();
+                    formData.append("image", file);
+                    formData.append("model_type", selectedModel);
+
+                    try {
+                        const res = await fetch(`${API_BASE}/api/remove-bg`, {
+                            method: "POST",
+                            body: formData,
+                        });
+
+                        const data = await res.json().catch(() => ({}));
+
+                        if (!res.ok) {
+                            throw new Error(
+                                data.error || "Failed to process image.",
+                            );
+                        }
+
+                        const fileId = data.file_id;
+
+                        // Simpan ke sessionStorage agar bisa di-restore saat HP sleep/tab switch
+                        saveSession({ type: 'bg_result', fileId });
+
+                        // Preview gambar original (dari browser local)
+                        const originalUrl = URL.createObjectURL(file);
+                        fgOriginalImage.src = originalUrl;
+
+                        // Tampilkan hasil dari server via URL (RAM sudah bebas di server)
+                        bgResultImage.src = `${API_BASE}/api/bg-result/${fileId}`;
+
+                        // Link download langsung ke endpoint dengan Content-Disposition
+                        bgDownloadLink.href = `${API_BASE}/api/bg-download/${fileId}`;
+                        bgDownloadLink.removeAttribute("download");
+
+                        bgLoadingSection.classList.add("hidden");
+                        bgResultSection.classList.remove("hidden");
+                    } catch (err) {
+                        showBgError(err.message);
+                        uploadZone.classList.remove("hidden");
+                        document
+                            .getElementById("modelSelector")
+                            .classList.remove("hidden");
+                    }
+                };
+
+                let isDragging = false;
+                const updateSliderPosition = (clientX) => {
+                    if (!sliderContainer) return;
+                    const rect = sliderContainer.getBoundingClientRect();
+                    let x = clientX - rect.left;
+                    if (x < 0) x = 0;
+                    if (x > rect.width) x = rect.width;
+                    const percent = (x / rect.width) * 100;
+                    fgOriginalImage.style.clipPath = `polygon(0 0, ${percent}% 0, ${percent}% 100%, 0 100%)`;
+                    sliderDivider.style.left = `${percent}%`;
+                    sliderHandle.style.left = `${percent}%`;
+                };
+
+                const startDrag = (e) => {
+                    isDragging = true;
+                    updateSliderPosition(
+                        e.clientX || (e.touches && e.touches[0].clientX),
+                    );
+                };
+
+                const stopDrag = () => {
+                    isDragging = false;
+                };
+
+                const onDrag = (e) => {
+                    if (!isDragging) return;
+                    e.preventDefault();
+                    updateSliderPosition(
+                        e.clientX || (e.touches && e.touches[0].clientX),
+                    );
+                };
+
+                sliderContainer.addEventListener("mousedown", startDrag);
+                sliderContainer.addEventListener("touchstart", startDrag, {
+                    passive: true,
+                });
+                window.addEventListener("mouseup", stopDrag);
+                window.addEventListener("touchend", stopDrag);
+                window.addEventListener("mousemove", onDrag);
+                window.addEventListener("touchmove", onDrag, {
+                    passive: false,
+                });
+
+                newBgBtn.addEventListener("click", () => {
+                    clearSession();  // Hapus state tersimpan
+                    bgResultSection.classList.add("hidden");
+                    bgErrorMsg.style.display = "none";
+                    fileInput.value = "";
+                    bgResultImage.src = "";
+                    fgOriginalImage.src = "";
+                    bgDownloadLink.href = "#";
+                    uploadZone.classList.remove("hidden");
+                    document.getElementById("modelSelector").classList.remove("hidden");
+
+                    // Reset Slider
+                    fgOriginalImage.style.clipPath =
+                        "polygon(0 0, 50% 0, 50% 100%, 0 100%)";
+                    sliderDivider.style.left = "50%";
+                    sliderHandle.style.left = "50%";
+                });
+
+                // =====================================================
+                // SESSION PERSISTENCE — HP Sleep / Tab Switch Recovery
+                // =====================================================
+                const SESSION_KEY = 'tools_studio_session';
+
+                const saveSession = (data) => {
+                    try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(data)); } catch(e) {}
+                };
+
+                const loadSession = () => {
+                    try { return JSON.parse(sessionStorage.getItem(SESSION_KEY) || 'null'); } catch(e) { return null; }
+                };
+
+                const clearSession = () => {
+                    try { sessionStorage.removeItem(SESSION_KEY); } catch(e) {}
+                };
+
+                // Restore hasil Remove BG dari session
+                const restoreBgSession = async (fileId) => {
+                    try {
+                        const check = await fetch(`${API_BASE}/api/bg-result/${fileId}`);
+                        if (!check.ok) { clearSession(); return; } // File sudah expired (>10 menit)
+
+                        // File masih ada - restore UI ke kondisi sebelum sleep
+                        switchTab('bg');
+                        uploadZone.classList.add('hidden');
+                        document.getElementById('modelSelector').classList.add('hidden');
+                        bgLoadingSection.classList.add('hidden');
+                        bgResultImage.src = `${API_BASE}/api/bg-result/${fileId}`;
+                        bgDownloadLink.href = `${API_BASE}/api/bg-download/${fileId}`;
+                        bgDownloadLink.removeAttribute('download');
+                        bgResultSection.classList.remove('hidden');
+                        console.log('[Session] BG result restored dari sessionStorage.');
+                    } catch(e) {
+                        clearSession(); // Network error / server tidak bisa dijangkau
+                    }
+                };
+
+                // Resume polling YouTube download dari session
+                const resumeYtSession = (taskId) => {
+                    currentTaskId = taskId;
+                    switchTab('yt');
+                    mediaInfo.classList.add('hidden');
+                    progressSection.classList.remove('hidden');
+                    progressBar.style.width = '50%';
+                    statusText.textContent = 'Reconnecting to server...';
+                    speedText.textContent = '--';
+                    etaText.textContent = '--';
+                    if (!pollInterval) {
+                        pollInterval = setInterval(() => pollStatus(taskId), 1000);
+                    }
+                    console.log('[Session] YT download resumed dari sessionStorage.');
+                };
+
+                // Cek dan restore state saat page visible
+                const checkAndRestoreSession = async () => {
+                    const state = loadSession();
+                    if (!state) return;
+                    if (state.type === 'bg_result' && state.fileId) {
+                        // Hanya restore kalau UI sedang tidak menampilkan result (mencegah double load)
+                        if (bgResultSection.classList.contains('hidden')) {
+                            await restoreBgSession(state.fileId);
+                        }
+                    } else if (state.type === 'yt_task' && state.taskId) {
+                        // Hanya resume kalau polling tidak sedang berjalan
+                        if (!pollInterval && resultSection.classList.contains('hidden')) {
+                            resumeYtSession(state.taskId);
+                        }
+                    }
+                };
+
+                // Deteksi HP wake up / tab aktif kembali
+                document.addEventListener('visibilitychange', () => {
+                    if (document.visibilityState === 'visible') {
+                        checkAndRestoreSession();
+                    }
+                });
+
+                // Restore saat halaman pertama kali dimuat (misal: user refresh)
+                checkAndRestoreSession();
+
+                // Set default theme class on body
+                document.body.classList.add("theme-yt");
 
                 // Modal Logic
                 const initModals = () => {
@@ -256,7 +716,48 @@ import "../styles/global.css";
                         openModal(
                             "Changelogs",
                             `
-                            <h3>v1.0.1 (Latest)</h3>
+                            <h3>v1.4.0 (Latest)</h3>
+                            <ul>
+                                <li><strong>Sharper Background Removal:</strong> Remove Background now produces cleaner, more precise results — especially around hair, fur, and fine edges.</li>
+                                <li><strong>Your Progress is Safe:</strong> If your phone locks or you switch to another app, your Remove BG result and any active downloads will still be there when you come back — no need to start over.</li>
+                                <li><strong>Smoother Performance:</strong> The server now handles memory more efficiently after each task, keeping things fast and stable even after heavy use.</li>
+                                <li><strong>Better Privacy:</strong> Any images left over from a previous session — such as after a server restart — are now automatically deleted right away, so your files are never kept longer than they should be.</li>
+                            </ul>
+                            <h3>v1.3.5</h3>
+                            <ul>
+                                <li><strong>AI Multi-Model:</strong> Introduced smart Image Type selector for Remove BG choose between Human/Portrait, Anime/Illustration, and General Object for significantly more accurate results.</li>
+                                <li><strong>AI Accuracy:</strong> Switched to specialized AI models per image type.</li>
+                            </ul>
+                            <h3>v1.3.0</h3>
+                            <ul>
+                                <li><strong>AI Enhancement:</strong> Upgraded Remove Background AI rendering engine to preserve complex edges (like hair & clothing) perfectly without harsh cutoffs.</li>
+                                <li><strong>AI Clean-Up:</strong> Integrated smart post-processing masks to automatically detect and eliminate floating shadow artifacts and leftover noisy blobs.</li>
+                            </ul>
+                            <h3>v1.2.5</h3>
+                            <ul>
+                                <li><strong>Grab It All:</strong> Updated from YouTube Downloader to Grab It All! Now you can grab media from Facebook, Twitter, Instagram, Threads, TikTok and more.</li>
+                                <li><strong>Smart Prefix:</strong> Social media links now automatically use short prefix abbreviations (e.g. FB, IG, TW) on filenames.</li>
+                                <li><strong>Changes:</strong> Logo changed to a download icon for better reflection of its functionality.</li>
+                                <li><strong>Hotfix:</strong> Resolved "Requested format is not available" error on YouTube caused by cookies conflict.</li>
+                                <li><strong>Notice:</strong> Temporarily disabled Threads downloading functionality due to underlying Meta API changes.</li>
+                            </ul>
+                            <h3>v1.1.3</h3>
+                            <ul>
+                                <li><strong>Server Health:</strong> Fixed server crash issues that caused a 9-hour downtime incident.</li>
+                                <li><strong>Bug Fixes:</strong> Resolved minor bugs and optimized performance.</li>
+                                <li><strong>UI Updates:</strong> Added a GitHub button for the project repository in the footer.</li>
+                                <li><strong>UI Updates:</strong> Added a Portfolio button in the footer for potential collaborations/work inquiries.</li>
+                            </ul>
+                            <h3>v1.1.2</h3>
+                            <ul>
+                                <li><strong>New Feature:</strong> Dual-SPA Architecture! Added a new powerful "Remove Background" AI Tool.</li>
+                                <li><strong>UI Updates:</strong> Added Tab Navigations with beautiful dynamic color themes (YouTube Maroon & AI Royal Blue) and smooth fade-in animations.</li>
+                                <li><strong>UI Updates:</strong> Interactive Dropzone & Before/After Image Comparison Slider for Remove BG.</li>
+                                <li><strong>Server Stability:</strong> Added 10MB max image upload limit for AI Rendering.</li>
+                                <li><strong>Bug Fixes:</strong> Fixed an issue causing file errors during download by implementing a smarter 24-Hour Server File Retention policy for YouTube downloads.</li>
+                                <li><strong>Privacy & Cleaner:</strong> AI images are instantly wiped on interaction, while YouTube downloads are automatically deleted by a server cron job every 24 hours. Your data is securely destroyed and never permanently stored!</li>
+                            </ul>
+                            <h3>v1.0.1</h3>
                             <ul>
                                 <li>Added server load protection features.</li>
                                 <li><strong>Restriction:</strong> All videos/audios are strictly limited to a maximum duration of 1 hour to ensure server stability.</li>
@@ -329,12 +830,13 @@ import "../styles/global.css";
 
                     qualitySelect.innerHTML = "";
                     const selectedType = formatType.value;
-                    const formats =
-                        currentMediaData.formats[
-                            selectedType === "mp4" ? "video" : "audio"
-                        ];
+                    let targetFmt = "video";
+                    if (selectedType === "mp3") targetFmt = "audio";
+                    if (selectedType === "image") targetFmt = "image";
 
-                    if (formats.length === 0) {
+                    const formats = currentMediaData.formats[targetFmt];
+
+                    if (!formats || formats.length === 0) {
                         const opt = document.createElement("option");
                         opt.textContent = "No formats available";
                         opt.disabled = true;
@@ -347,9 +849,16 @@ import "../styles/global.css";
                         if (selectedType === "mp4") {
                             opt.value = f.resolution;
                             opt.textContent = `${f.resolution}p (${bytesToSize(f.filesize)})`;
-                        } else {
+                        } else if (selectedType === "mp3") {
                             opt.value = f.abr;
                             opt.textContent = `${f.abr} kbps (${bytesToSize(f.filesize)})`;
+                        } else if (selectedType === "image") {
+                            opt.value = f.format_id;
+                            let resText =
+                                f.resolution > 0
+                                    ? `Res: ${f.resolution}`
+                                    : "Original";
+                            opt.textContent = `${resText} (${bytesToSize(f.filesize)})`;
                         }
                         qualitySelect.appendChild(opt);
                     });
@@ -360,7 +869,14 @@ import "../styles/global.css";
                 fetchBtn.addEventListener("click", async () => {
                     const url = urlInput.value.trim();
                     if (!url) {
-                        showError("Please enter a valid YouTube URL");
+                        showError("Please enter a valid URL");
+                        return;
+                    }
+
+                    if (url.toLowerCase().includes("threads.net")) {
+                        showError(
+                            "Sorry, Threads downloading is temporarily disabled due to Meta's system changes.",
+                        );
                         return;
                     }
 
@@ -390,6 +906,29 @@ import "../styles/global.css";
                         currentMediaData = data;
                         thumbnail.src = data.thumbnail;
                         videoTitle.textContent = data.title;
+
+                        const prevVal = formatType.value;
+                        formatType.innerHTML = "";
+                        if (data.formats.video && data.formats.video.length > 0)
+                            formatType.innerHTML +=
+                                '<option value="mp4">Video (MP4)</option>';
+                        if (data.formats.audio && data.formats.audio.length > 0)
+                            formatType.innerHTML +=
+                                '<option value="mp3">Audio (MP3)</option>';
+                        if (data.formats.image && data.formats.image.length > 0)
+                            formatType.innerHTML +=
+                                '<option value="image">Image (JPG)</option>';
+
+                        if (
+                            Array.from(formatType.options).some(
+                                (o) => o.value === prevVal,
+                            )
+                        ) {
+                            formatType.value = prevVal;
+                        } else if (formatType.options.length > 0) {
+                            formatType.value = formatType.options[0].value;
+                        }
+
                         updateQualityOptions();
 
                         mediaInfo.classList.remove("hidden");
@@ -437,20 +976,23 @@ import "../styles/global.css";
                             etaText.textContent = "Almost done...";
                         } else if (data.status === "done") {
                             clearInterval(pollInterval);
+                            pollInterval = null;
+                            clearSession();  // Hapus state YT setelah selesai
                             progressSection.classList.add("hidden");
                             resultSection.classList.remove("hidden");
-
                             downloadLink.href = `${API_BASE}/api/download/${taskId}`;
                         } else if (data.status === "error") {
                             clearInterval(pollInterval);
+                            pollInterval = null;
+                            clearSession();  // Hapus state YT jika error
                             progressSection.classList.add("hidden");
                             showError("Processing failed: " + data.error);
                         }
                     } catch (err) {
                         console.error("Polling error", err);
-                        clearInterval(pollInterval);
-                        progressSection.classList.add("hidden");
-                        showError("Connection lost while checking status.");
+                        // Jangan hapus interval — bisa jadi cuma network glitch sementara (HP sleep sebentar)
+                        // Polling akan retry otomatis di next interval
+                        statusText.textContent = 'Connection lost. Retrying...';
                     }
                 };
 
@@ -483,6 +1025,9 @@ import "../styles/global.css";
                             );
                         }
 
+                        currentTaskId = data.task_id;
+                        // Simpan task_id ke sessionStorage agar bisa di-resume saat HP sleep
+                        saveSession({ type: 'yt_task', taskId: data.task_id });
                         pollInterval = setInterval(
                             () => pollStatus(data.task_id),
                             1000,
@@ -494,6 +1039,9 @@ import "../styles/global.css";
                 });
 
                 newDownloadBtn.addEventListener("click", () => {
+                    clearSession();  // Hapus state YT tersimpan
+                    currentTaskId = null;
+                    pollInterval = null;
                     resultSection.classList.add("hidden");
                     urlInput.value = "";
                     urlInput.focus();
