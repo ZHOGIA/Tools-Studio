@@ -36,20 +36,46 @@ import "../styles/global.css";
                     >
                 </div>
                 <div class="logo-icon">
+<<<<<<< HEAD
                     <i class="fa-solid fa-download" id="mainIcon"></i>
                 </div>
                 <h1>Tool's <span>Studio</span></h1>
                 <p id="headerDesc">
                     Download high-quality video and audio seamlessly.
                 </p>
+=======
+                    <i class="fa-solid fa-bolt" id="mainIcon"></i>
+                </div>
+                <h1>Tool's <span>Studio</span></h1>
+                <p id="headerDesc">Download high-quality video and audio seamlessly.</p>
+>>>>>>> cab77fc4d96170522d802336e284acc0ec7546c0
             </header>
 
             <main>
                 <div class="tab-navigation">
+<<<<<<< HEAD
                     <button class="tab-btn active" id="tabYt"
                         >Grab It All</button
                     >
                     <button class="tab-btn" id="tabBg">Remove BG</button>
+=======
+                    <button class="tab-btn active" id="tabYt">YouTube Downloader</button>
+                    <button class="tab-btn" id="tabBg">Remove BG</button>
+                </div>
+
+                <div id="ytSection" class="feature-section active">
+                    <div class="input-group">
+                    <input
+                        type="text"
+                        id="urlInput"
+                        placeholder="Paste YouTube link here..."
+                        autocomplete="off"
+                    />
+                    <button id="fetchBtn" class="primary-btn">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <span id="fetchText">Fetch</span>
+                    </button>
+>>>>>>> cab77fc4d96170522d802336e284acc0ec7546c0
                 </div>
 
                 <!-- YouTube Downloader Section -->
@@ -257,6 +283,7 @@ import "../styles/global.css";
                     </a>
                 </div>
 
+<<<<<<< HEAD
                 <footer style="position: relative;">
                     <p>&copy; 2026 Tool's Studio. All rights reserved.</p>
                     <div
@@ -291,7 +318,84 @@ import "../styles/global.css";
                         </div>
                     </div>
                 </footer>
+=======
+                </div>
+
+                <div id="bgSection" class="feature-section">
+                    <div class="upload-zone" id="uploadZone">
+                        <input type="file" id="fileInput" accept="image/png, image/jpeg, image/jpg, image/webp">
+                        <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                        <h3 class="upload-text">Drag & Drop Image Here</h3>
+                        <p class="upload-subtext">or click to browse files (PNG, JPG, WEBP)</p>
+                    </div>
+
+                    <div id="bgErrorMsg" class="error-message"></div>
+
+                    <div id="bgLoadingSection" class="bg-result-container hidden">
+                        <i class="fa-solid fa-spinner loading-spinner"></i>
+                        <h3 id="bgStatusText">Removing background...</h3>
+                    </div>
+
+                    <div id="bgResultSection" class="bg-result-container hidden">
+                        <div class="slider-container" id="sliderContainer">
+                            <img class="bg-result-image slider-img" id="bgResultImage" src="" alt="Removed Background Result">
+                            <img class="slider-img fg" id="fgOriginalImage" src="" alt="Original Image">
+                            <div class="slider-divider" id="sliderDivider"></div>
+                            <div class="slider-handle" id="sliderHandle">
+                                <i class="fa-solid fa-arrows-left-right"></i>
+                            </div>
+                        </div>
+                        <a id="bgDownloadLink" href="#" class="download-btn" download="removed-bg.png">
+                            <i class="fa-solid fa-download"></i> Save Image
+                        </a>
+                        <button id="newBgBtn" class="secondary-btn">Process Another Image</button>
+                    </div>
+                </div>
+
+                <!-- Local Ad Banner -->
+                <div class="ad-banner">
+                    <div class="ad-content">
+                        <span class="ad-badge">Sponsored</span>
+                        <h4>Butuh Jasa Photocopy & Percetakan?</h4>
+                        <p>
+                            Kunjungi <strong>SMANSA Corner</strong> untuk hasil cepat
+                            dan berkualitas.
+                        </p>
+                    </div>
+                    <a
+                        href="https://smansacorner.my.id"
+                        target="_blank"
+                        class="ad-btn"
+                    >
+                        Kunjungi Web <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+>>>>>>> cab77fc4d96170522d802336e284acc0ec7546c0
             </main>
+
+            <footer>
+                <p>&copy; 2026 Tool's Studio. All rights reserved.</p>
+                <div class="footer-links">
+                    <button id="btnPrivacy" class="text-btn">Privacy</button>
+                    <span>|</span>
+                    <button id="btnTerms" class="text-btn">Terms</button>
+                </div>
+            </footer>
+        </div>
+
+        <!-- Modal Overlay -->
+        <div id="infoModal" class="modal-overlay hidden">
+            <div class="modal-content glass-panel">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Title</h2>
+                    <button id="closeModal" class="icon-btn"
+                        ><i class="fa-solid fa-xmark"></i></button
+                    >
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
         </div>
 
         <!-- Modal Overlay -->
@@ -325,8 +429,13 @@ import "../styles/global.css";
                 }
 
                 // Configure Base API URL based on environment
+<<<<<<< HEAD
                 const API_BASE = import.meta.env.DEV
                     ? "http://localhost:5000"
+=======
+                const API_BASE = import.meta.env.DEV 
+                    ? "http://localhost:5000" 
+>>>>>>> cab77fc4d96170522d802336e284acc0ec7546c0
                     : "https://api.zhogia.my.id";
 
                 const urlInput = document.getElementById("urlInput");
@@ -359,12 +468,21 @@ import "../styles/global.css";
                 let currentTaskId = null;
 
                 // Tab Logic & Feature Switching
+<<<<<<< HEAD
                 const tabYt = document.getElementById("tabYt");
                 const tabBg = document.getElementById("tabBg");
                 const ytSection = document.getElementById("ytSection");
                 const bgSection = document.getElementById("bgSection");
                 const mainIcon = document.getElementById("mainIcon");
                 const headerDesc = document.getElementById("headerDesc");
+=======
+                const tabYt = document.getElementById("tabYt") as HTMLButtonElement;
+                const tabBg = document.getElementById("tabBg") as HTMLButtonElement;
+                const ytSection = document.getElementById("ytSection") as HTMLDivElement;
+                const bgSection = document.getElementById("bgSection") as HTMLDivElement;
+                const mainIcon = document.getElementById("mainIcon") as HTMLElement;
+                const headerDesc = document.getElementById("headerDesc") as HTMLParagraphElement;
+>>>>>>> cab77fc4d96170522d802336e284acc0ec7546c0
 
                 const switchTab = (activeTab) => {
                     if (activeTab === "yt") {
@@ -374,9 +492,14 @@ import "../styles/global.css";
                         bgSection.classList.remove("active");
                         document.body.classList.remove("theme-bg");
                         document.body.classList.add("theme-yt");
+<<<<<<< HEAD
                         mainIcon.className = "fa-solid fa-download";
                         headerDesc.textContent =
                             "Download high-quality video and audio seamlessly.";
+=======
+                        mainIcon.className = "fa-solid fa-bolt";
+                        headerDesc.textContent = "Download high-quality video and audio seamlessly.";
+>>>>>>> cab77fc4d96170522d802336e284acc0ec7546c0
                     } else {
                         tabBg.classList.add("active");
                         tabYt.classList.remove("active");
@@ -385,8 +508,12 @@ import "../styles/global.css";
                         document.body.classList.remove("theme-yt");
                         document.body.classList.add("theme-bg");
                         mainIcon.className = "fa-solid fa-wand-magic-sparkles";
+<<<<<<< HEAD
                         headerDesc.textContent =
                             "Remove background from your images instantly with AI.";
+=======
+                        headerDesc.textContent = "Remove background from your images instantly with AI.";
+>>>>>>> cab77fc4d96170522d802336e284acc0ec7546c0
                     }
                 };
 
@@ -394,6 +521,7 @@ import "../styles/global.css";
                 tabBg.addEventListener("click", () => switchTab("bg"));
 
                 // Remove BG Logic
+<<<<<<< HEAD
                 const uploadZone = document.getElementById("uploadZone");
                 const fileInput = document.getElementById("fileInput");
                 const bgErrorMsg = document.getElementById("bgErrorMsg");
@@ -422,6 +550,21 @@ import "../styles/global.css";
                         selectedModel = btn.dataset.model;
                     });
                 });
+=======
+                const uploadZone = document.getElementById("uploadZone") as HTMLDivElement;
+                const fileInput = document.getElementById("fileInput") as HTMLInputElement;
+                const bgErrorMsg = document.getElementById("bgErrorMsg") as HTMLDivElement;
+                const bgLoadingSection = document.getElementById("bgLoadingSection") as HTMLDivElement;
+                const bgStatusText = document.getElementById("bgStatusText") as HTMLHeadingElement;
+                const bgResultSection = document.getElementById("bgResultSection") as HTMLDivElement;
+                const bgResultImage = document.getElementById("bgResultImage") as HTMLImageElement;
+                const fgOriginalImage = document.getElementById("fgOriginalImage") as HTMLImageElement;
+                const sliderContainer = document.getElementById("sliderContainer") as HTMLDivElement;
+                const sliderDivider = document.getElementById("sliderDivider") as HTMLDivElement;
+                const sliderHandle = document.getElementById("sliderHandle") as HTMLDivElement;
+                const bgDownloadLink = document.getElementById("bgDownloadLink") as HTMLAnchorElement;
+                const newBgBtn = document.getElementById("newBgBtn") as HTMLButtonElement;
+>>>>>>> cab77fc4d96170522d802336e284acc0ec7546c0
 
                 uploadZone.addEventListener("click", () => fileInput.click());
 
@@ -457,6 +600,7 @@ import "../styles/global.css";
                     const file = fileInput.files?.[0];
                     if (!file) return;
 
+<<<<<<< HEAD
                     const validTypes = [
                         "image/jpeg",
                         "image/png",
@@ -467,31 +611,47 @@ import "../styles/global.css";
                         showBgError(
                             "Unsupported file type. Please upload a PNG, JPG, or WEBP.",
                         );
+=======
+                    const validTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
+                    if (!validTypes.includes(file.type)) {
+                        showBgError("Unsupported file type. Please upload a PNG, JPG, or WEBP.");
+>>>>>>> cab77fc4d96170522d802336e284acc0ec7546c0
                         return;
                     }
 
                     if (file.size > 10 * 1024 * 1024) {
+<<<<<<< HEAD
                         showBgError(
                             "Gambar terlalu besar! Maksimal ukuran file adalah 10 MB.",
                         );
+=======
+                        showBgError("Gambar terlalu besar! Maksimal ukuran file adalah 10 MB.");
+>>>>>>> cab77fc4d96170522d802336e284acc0ec7546c0
                         return;
                     }
 
                     bgErrorMsg.style.display = "none";
                     uploadZone.classList.add("hidden");
+<<<<<<< HEAD
                     document
                         .getElementById("modelSelector")
                         .classList.add("hidden");
+=======
+>>>>>>> cab77fc4d96170522d802336e284acc0ec7546c0
                     bgResultSection.classList.add("hidden");
                     bgLoadingSection.classList.remove("hidden");
 
                     const formData = new FormData();
                     formData.append("image", file);
+<<<<<<< HEAD
                     formData.append("model_type", selectedModel);
+=======
+>>>>>>> cab77fc4d96170522d802336e284acc0ec7546c0
 
                     try {
                         const res = await fetch(`${API_BASE}/api/remove-bg`, {
                             method: "POST",
+<<<<<<< HEAD
                             body: formData,
                         });
 
@@ -519,11 +679,31 @@ import "../styles/global.css";
                         bgDownloadLink.href = `${API_BASE}/api/bg-download/${fileId}`;
                         bgDownloadLink.removeAttribute("download");
 
+=======
+                            body: formData
+                        });
+
+                        if (!res.ok) {
+                            const data = await res.json().catch(() => ({}));
+                            throw new Error(data.error || "Failed to process image.");
+                        }
+
+                        const originalUrl = URL.createObjectURL(file);
+                        fgOriginalImage.src = originalUrl;
+
+                        const blob = await res.blob();
+                        const objUrl = URL.createObjectURL(blob);
+                        
+                        bgResultImage.src = objUrl;
+                        bgDownloadLink.href = objUrl;
+                        
+>>>>>>> cab77fc4d96170522d802336e284acc0ec7546c0
                         bgLoadingSection.classList.add("hidden");
                         bgResultSection.classList.remove("hidden");
                     } catch (err) {
                         showBgError(err.message);
                         uploadZone.classList.remove("hidden");
+<<<<<<< HEAD
                         document
                             .getElementById("modelSelector")
                             .classList.remove("hidden");
@@ -575,6 +755,11 @@ import "../styles/global.css";
                     updateBgColor(e.target.value);
                 });
 
+=======
+                    }
+                };
+
+>>>>>>> cab77fc4d96170522d802336e284acc0ec7546c0
                 let isDragging = false;
                 const updateSliderPosition = (clientX) => {
                     if (!sliderContainer) return;
@@ -590,6 +775,7 @@ import "../styles/global.css";
 
                 const startDrag = (e) => {
                     isDragging = true;
+<<<<<<< HEAD
                     updateSliderPosition(
                         e.clientX || (e.touches && e.touches[0].clientX),
                     );
@@ -598,10 +784,17 @@ import "../styles/global.css";
                 const stopDrag = () => {
                     isDragging = false;
                 };
+=======
+                    updateSliderPosition(e.clientX || (e.touches && e.touches[0].clientX));
+                };
+
+                const stopDrag = () => { isDragging = false; };
+>>>>>>> cab77fc4d96170522d802336e284acc0ec7546c0
 
                 const onDrag = (e) => {
                     if (!isDragging) return;
                     e.preventDefault();
+<<<<<<< HEAD
                     updateSliderPosition(
                         e.clientX || (e.touches && e.touches[0].clientX),
                     );
@@ -620,11 +813,25 @@ import "../styles/global.css";
 
                 newBgBtn.addEventListener("click", () => {
                     clearSession();  // Hapus state tersimpan
+=======
+                    updateSliderPosition(e.clientX || (e.touches && e.touches[0].clientX));
+                };
+
+                sliderContainer.addEventListener("mousedown", startDrag);
+                sliderContainer.addEventListener("touchstart", startDrag, { passive: true });
+                window.addEventListener("mouseup", stopDrag);
+                window.addEventListener("touchend", stopDrag);
+                window.addEventListener("mousemove", onDrag);
+                window.addEventListener("touchmove", onDrag, { passive: false });
+
+                newBgBtn.addEventListener("click", () => {
+>>>>>>> cab77fc4d96170522d802336e284acc0ec7546c0
                     bgResultSection.classList.add("hidden");
                     bgErrorMsg.style.display = "none";
                     fileInput.value = "";
                     bgResultImage.src = "";
                     fgOriginalImage.src = "";
+<<<<<<< HEAD
                     bgDownloadLink.href = "#";
                     uploadZone.classList.remove("hidden");
                     document.getElementById("modelSelector").classList.remove("hidden");
@@ -726,6 +933,17 @@ import "../styles/global.css";
                 // Restore saat halaman pertama kali dimuat (misal: user refresh)
                 checkAndRestoreSession();
 
+=======
+                    URL.revokeObjectURL(bgDownloadLink.href);
+                    uploadZone.classList.remove("hidden");
+                    
+                    // Reset Slider
+                    fgOriginalImage.style.clipPath = 'polygon(0 0, 50% 0, 50% 100%, 0 100%)';
+                    sliderDivider.style.left = '50%';
+                    sliderHandle.style.left = '50%';
+                });
+
+>>>>>>> cab77fc4d96170522d802336e284acc0ec7546c0
                 // Set default theme class on body
                 document.body.classList.add("theme-yt");
 
@@ -784,6 +1002,7 @@ import "../styles/global.css";
                         openModal(
                             "Changelogs",
                             `
+<<<<<<< HEAD
                             <h3>v1.4.0 (Latest)</h3>
                             <ul>
                                 <li><strong>Sharper Background Removal:</strong> Remove Background now produces cleaner, more precise results — especially around hair, fur, and fine edges.</li>
@@ -817,13 +1036,20 @@ import "../styles/global.css";
                                 <li><strong>UI Updates:</strong> Added a Portfolio button in the footer for potential collaborations/work inquiries.</li>
                             </ul>
                             <h3>v1.1.2</h3>
+=======
+                            <h3>v1.1.2 (Latest)</h3>
+>>>>>>> cab77fc4d96170522d802336e284acc0ec7546c0
                             <ul>
                                 <li><strong>New Feature:</strong> Dual-SPA Architecture! Added a new powerful "Remove Background" AI Tool.</li>
                                 <li><strong>UI Updates:</strong> Added Tab Navigations with beautiful dynamic color themes (YouTube Maroon & AI Royal Blue) and smooth fade-in animations.</li>
                                 <li><strong>UI Updates:</strong> Interactive Dropzone & Before/After Image Comparison Slider for Remove BG.</li>
                                 <li><strong>Server Stability:</strong> Added 10MB max image upload limit for AI Rendering.</li>
+<<<<<<< HEAD
                                 <li><strong>Bug Fixes:</strong> Fixed an issue causing file errors during download by implementing a smarter 24-Hour Server File Retention policy for YouTube downloads.</li>
                                 <li><strong>Privacy & Cleaner:</strong> AI images are instantly wiped on interaction, while YouTube downloads are automatically deleted by a server cron job every 24 hours. Your data is securely destroyed and never permanently stored!</li>
+=======
+                                <li><strong>Privacy & Cleaner:</strong> Implemented extreme Auto-Cleanup systems! Processed file and payloads are instantly wiped clean from the server memory after you hit 'Process Another' or close the browser tab. Data is never permanently stored!</li>
+>>>>>>> cab77fc4d96170522d802336e284acc0ec7546c0
                             </ul>
                             <h3>v1.0.1</h3>
                             <ul>
@@ -1094,8 +1320,11 @@ import "../styles/global.css";
                         }
 
                         currentTaskId = data.task_id;
+<<<<<<< HEAD
                         // Simpan task_id ke sessionStorage agar bisa di-resume saat HP sleep
                         saveSession({ type: 'yt_task', taskId: data.task_id });
+=======
+>>>>>>> cab77fc4d96170522d802336e284acc0ec7546c0
                         pollInterval = setInterval(
                             () => pollStatus(data.task_id),
                             1000,
@@ -1107,12 +1336,25 @@ import "../styles/global.css";
                 });
 
                 newDownloadBtn.addEventListener("click", () => {
+<<<<<<< HEAD
                     clearSession();  // Hapus state YT tersimpan
                     currentTaskId = null;
                     pollInterval = null;
+=======
+                    if (currentTaskId) {
+                        fetch(`${API_BASE}/api/cleanup/${currentTaskId}`, { method: 'POST' }).catch(() => {});
+                        currentTaskId = null;
+                    }
+>>>>>>> cab77fc4d96170522d802336e284acc0ec7546c0
                     resultSection.classList.add("hidden");
                     urlInput.value = "";
                     urlInput.focus();
+                });
+
+                window.addEventListener("beforeunload", () => {
+                    if (currentTaskId) {
+                        navigator.sendBeacon(`${API_BASE}/api/cleanup/${currentTaskId}`);
+                    }
                 });
             });
         </script>
