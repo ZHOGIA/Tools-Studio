@@ -191,6 +191,20 @@ import "../styles/global.css";
                         id="bgResultSection"
                         class="bg-result-container hidden"
                     >
+                        <div class="color-picker-container" id="colorPickerContainer">
+                            <p class="color-picker-label">Background Color</p>
+                            <div class="color-options">
+                                <button class="color-btn active" data-color="transparent" title="Transparent"><i class="fa-solid fa-ban"></i></button>
+                                <button class="color-btn" data-color="#ff0000" style="background-color: #ff0000;" title="Red"></button>
+                                <button class="color-btn" data-color="#ffff00" style="background-color: #ffff00;" title="Yellow"></button>
+                                <button class="color-btn" data-color="#0000ff" style="background-color: #0000ff;" title="Blue"></button>
+                                <div class="custom-color-wrapper" title="Custom Color">
+                                    <i class="fa-solid fa-palette custom-color-icon"></i>
+                                    <input type="color" id="customColorPicker" value="#ffffff" />
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="slider-container" id="sliderContainer">
                             <img
                                 class="bg-result-image slider-img"
@@ -516,6 +530,51 @@ import "../styles/global.css";
                     }
                 };
 
+                // Background Color Picker Logic
+                const colorBtns = document.querySelectorAll('.color-btn');
+                const customColorPicker = document.getElementById('customColorPicker');
+                let currentBgColor = 'transparent';
+
+                const updateBgColor = (color) => {
+                    currentBgColor = color;
+                    
+                    // Reset custom picker border
+                    customColorPicker.parentElement.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                    customColorPicker.parentElement.classList.remove('active-custom');
+                    
+                    if (color === 'transparent') {
+                        bgResultImage.style.backgroundColor = 'transparent';
+                    } else {
+                        bgResultImage.style.backgroundColor = color;
+                    }
+
+                    // Update download link
+                    const baseUrl = bgDownloadLink.href.split('?')[0];
+                    if (color === 'transparent') {
+                        bgDownloadLink.href = baseUrl;
+                        bgDownloadLink.setAttribute("download", "removed-bg.png");
+                    } else {
+                        const hex = color.replace('#', '');
+                        bgDownloadLink.href = `${baseUrl}?color=${hex}`;
+                        bgDownloadLink.setAttribute("download", "removed-bg-colored.jpg");
+                    }
+                };
+
+                colorBtns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        colorBtns.forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        updateBgColor(btn.dataset.color);
+                    });
+                });
+
+                customColorPicker.addEventListener('input', (e) => {
+                    colorBtns.forEach(b => b.classList.remove('active'));
+                    customColorPicker.parentElement.style.borderColor = 'white';
+                    customColorPicker.parentElement.classList.add('active-custom');
+                    updateBgColor(e.target.value);
+                });
+
                 let isDragging = false;
                 const updateSliderPosition = (clientX) => {
                     if (!sliderContainer) return;
@@ -569,6 +628,15 @@ import "../styles/global.css";
                     bgDownloadLink.href = "#";
                     uploadZone.classList.remove("hidden");
                     document.getElementById("modelSelector").classList.remove("hidden");
+
+                    // Reset Background Color State
+                    colorBtns.forEach(b => b.classList.remove('active'));
+                    const transparentBtn = document.querySelector('.color-btn[data-color="transparent"]');
+                    if(transparentBtn) transparentBtn.classList.add('active');
+                    customColorPicker.parentElement.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                    customColorPicker.parentElement.classList.remove('active-custom');
+                    bgResultImage.style.backgroundColor = 'transparent';
+                    currentBgColor = 'transparent';
 
                     // Reset Slider
                     fgOriginalImage.style.clipPath =
